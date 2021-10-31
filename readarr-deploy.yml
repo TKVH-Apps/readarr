@@ -1,0 +1,71 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: readarr
+  labels:
+    app: readarr
+    part-of: readarr
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@hourly"
+    keel.sh/match-tag: true
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readarr
+      part-of: readarr
+  template:
+    metadata:
+      labels:
+        app: readarr
+        part-of: readarr
+    spec:
+      containers:
+      - name: readarr
+        image: ghcr.io/linuxserver/readarr:nightly
+        ports:
+        - name: readarr
+          containerPort: 8787
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "Europe/Paris"
+        - name: UMASK
+          value: "022"
+        volumeMounts:
+        - name: readarr
+          mountPath: /config
+        - name: books
+          mountPath: /books
+        - name: downloads
+          mountPath: /downloads/movies
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 256Mi
+        readinessProbe:
+          tcpSocket:
+            port: readarr
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: readarr
+          initialDelaySeconds: 15
+          periodSeconds: 20
+      volumes:
+      - name: readarr
+        persistentVolumeClaim:
+          claimName: readarr
+      - name: books
+        persistentVolumeClaim:
+          claimName: books
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads

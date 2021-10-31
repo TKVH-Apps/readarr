@@ -1,0 +1,42 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: readarr
+  annotations:
+    nfs.io/storage-path: "data01/readarr"
+spec:
+  storageClassName: managed-nfs-storage
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: books
+  annotations:
+    nfs.io/storage-path: "data02/media/books"
+spec:
+  storageClassName: managed-nfs-storage
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: downloads
+  annotations:
+    nfs.io/storage-path: "data02/downloads/books"
+spec:
+  storageClassName: managed-nfs-storage
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
