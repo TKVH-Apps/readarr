@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: readarr
-        image: ghcr.io/linuxserver/readarr:nightly
+        image: ghcr.io/linuxserver/readarr:0.1.1-nightly
         ports:
         - name: readarr
           containerPort: 8787
